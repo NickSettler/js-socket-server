@@ -7,3 +7,7 @@ node_modules/**/*
 
 # Application ENV
 .env
+
+# Production
+./dist/*
+!.gitignore
