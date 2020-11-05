@@ -1,3 +1,5 @@
+import * as fs from "fs";
+
 require('dotenv').config();
 import express = require("express");
 import * as io from "socket.io";
@@ -6,6 +8,15 @@ import {APP_PORT, routes} from "./consts";
 import {Route, SocketClient} from "./types";
 import {isFileResponse, isJsonResponse} from "./functions";
 import * as path from "path";
+import * as https from "https";
+
+const {SSL_KEY_PATH, SSL_CERT_PATH} = process.env;
+
+const key = fs.readFileSync(SSL_KEY_PATH);
+const cert = fs.readFileSync(SSL_CERT_PATH);
+const options = {
+    key, cert
+};
 
 const app: express.Application = express();
 
@@ -17,7 +28,9 @@ routes.map((route: Route) => app[route.method](route.path, (req, res) => {
     }
 }));
 
-const server = app.listen(APP_PORT, () => {
+const server = https.createServer(options, app);
+
+server.listen(APP_PORT, () => {
     console.log(`Server is on port ${APP_PORT}`);
 });
 
