@@ -1,13 +1,15 @@
 import * as fs from "fs";
 
-require('dotenv').config();
+import * as path from "path";
+require('dotenv').config({
+    path: path.join(__dirname, ".env")
+});
 import express = require("express");
 import * as io from "socket.io";
 import SocketIO from "socket.io";
 import {APP_PORT, routes} from "./consts";
 import {Route, SocketClient} from "./types";
 import {isFileResponse, isJsonResponse} from "./functions";
-import * as path from "path";
 import * as https from "https";
 
 const {SSL_KEY_PATH, SSL_CERT_PATH} = process.env;
