@@ -6,7 +6,8 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "start": "nodemon",
-        "build": "tsc"
+        "build": "tsc",
+        "start:prod": "pm2 start dist/server.js --name \"socket-server\""
     },
     "keywords": [],
     "author": "",
