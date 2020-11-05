@@ -1,0 +1,9 @@
+# IDE Files
+.idea/
+
+# Dependencies
+package-lock.json
+node_modules/**/*
+
+# Application ENV
+.env
