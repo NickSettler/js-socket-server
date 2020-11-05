@@ -1,5 +1,4 @@
 require('dotenv').config();
-import * as crypto from "crypto";
 import express = require("express");
 import * as io from "socket.io";
 import SocketIO from "socket.io";
@@ -7,8 +6,6 @@ import {APP_PORT, routes} from "./consts";
 import {Route, SocketClient} from "./types";
 import {isFileResponse, isJsonResponse} from "./functions";
 import * as path from "path";
-
-const {SHA256_KEY} = process.env;
 
 const app: express.Application = express();
 
@@ -38,13 +35,8 @@ socketServer.on("connection", (socket: SocketIO.Socket) => {
         number
     });
 
-    const hash = crypto.createHmac("sha256", SHA256_KEY)
-        .update(socket.id)
-        .digest("hex");
-
     socket.emit('connect_success', {
         id: socket.id,
-        hash,
     });
 
     socket.on('number_change', (data) => {
