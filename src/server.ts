@@ -1,9 +1,7 @@
 import * as fs from "fs";
 
 import * as path from "path";
-require('dotenv').config({
-    path: path.join(__dirname, ".env")
-});
+require('dotenv').config();
 import express = require("express");
 import * as io from "socket.io";
 import SocketIO from "socket.io";
