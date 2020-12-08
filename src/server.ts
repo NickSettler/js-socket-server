@@ -7,8 +7,7 @@ import * as io from "socket.io";
 import SocketIO from "socket.io";
 import {APP_PORT, routes} from "./consts";
 import {Route, SocketClient} from "./types";
-import {isFileResponse, isJsonResponse} from "./functions";
-import * as https from "https";
+import {createServer, isFileResponse, isJsonResponse} from "./functions";
 
 const {SSL_KEY_PATH, SSL_CERT_PATH} = process.env;
 
@@ -28,7 +27,7 @@ routes.map((route: Route) => app[route.method](route.path, (req, res) => {
     }
 }));
 
-const server = https.createServer(options, app);
+const server = createServer(app, options);
 
 server.listen(APP_PORT, () => {
     console.log(`Server is on port ${APP_PORT}`);
