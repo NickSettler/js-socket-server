@@ -1,4 +1,5 @@
 import {Route} from "./types";
+import {apiLocationHandler} from "./handlers";
 
 export const APP_PORT = 3000;
 
@@ -22,4 +23,9 @@ export const routes: Array<Route> = [
         },
         statusCode: 200,
     },
+    {
+        path: '/api/location/',
+        method: EXPRESS_METHODS.POST,
+        handler: apiLocationHandler
+    }
 ]
