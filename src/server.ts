@@ -1,14 +1,14 @@
 import * as fs from "fs";
-
 import * as path from "path";
-require('dotenv').config();
+import * as dotenv from "dotenv";
+dotenv.config();
 import express = require("express");
+import * as bodyParser from 'body-parser';
 import * as io from "socket.io";
 import SocketIO from "socket.io";
 import {APP_PORT, routes} from "./consts";
 import {Route, SocketClient} from "./types";
-import {isFileResponse, isJsonResponse} from "./functions";
-import * as https from "https";
+import {createServer, isFileResponse, isJsonResponse} from "./functions";
 
 const {SSL_KEY_PATH, SSL_CERT_PATH} = process.env;
 
@@ -20,15 +20,23 @@ const options = {
 
 const app: express.Application = express();
 
+app.use(bodyParser.urlencoded({extended: false}))
+
+app.use(bodyParser.json());
+
 routes.map((route: Route) => app[route.method](route.path, (req, res) => {
-    if (isJsonResponse(route.response)) {
-        res.json(route.response).status(route.statusCode);
-    } else if (isFileResponse(route.response)) {
-        res.sendFile(path.join(__dirname, route.response.filename));
+    if (route.handler)
+        route.handler.call(this, req, res);
+    else {
+        if (isJsonResponse(route.response)) {
+            res.json(route.response).status(route.statusCode);
+        } else if (isFileResponse(route.response)) {
+            res.sendFile(path.join(__dirname, route.response.filename));
+        }
     }
 }));
 
-const server = https.createServer(options, app);
+const server = createServer(app, options);
 
 server.listen(APP_PORT, () => {
     console.log(`Server is on port ${APP_PORT}`);
