@@ -3,8 +3,9 @@ import {EXPRESS_METHODS, JSON_RESPONSES} from "./consts";
 export type Route = {
     path: string;
     method: EXPRESS_METHODS;
-    statusCode: number;
-    response: JsonResponse | FileResponse;
+    statusCode?: number;
+    response?: JsonResponse | FileResponse;
+    handler?: Function;
 }
 
 export type JsonResponse = {

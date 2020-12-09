@@ -25,10 +25,14 @@ app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json());
 
 routes.map((route: Route) => app[route.method](route.path, (req, res) => {
-    if (isJsonResponse(route.response)) {
-        res.json(route.response).status(route.statusCode);
-    } else if (isFileResponse(route.response)) {
-        res.sendFile(path.join(__dirname, route.response.filename));
+    if (route.handler)
+        route.handler.call(this, req, res);
+    else {
+        if (isJsonResponse(route.response)) {
+            res.json(route.response).status(route.statusCode);
+        } else if (isFileResponse(route.response)) {
+            res.sendFile(path.join(__dirname, route.response.filename));
+        }
     }
 }));
 
