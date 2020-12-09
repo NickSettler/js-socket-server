@@ -3,6 +3,7 @@ import * as path from "path";
 import * as dotenv from "dotenv";
 dotenv.config();
 import express = require("express");
+import * as bodyParser from 'body-parser';
 import * as io from "socket.io";
 import SocketIO from "socket.io";
 import {APP_PORT, routes} from "./consts";
@@ -18,6 +19,10 @@ const options = {
 };
 
 const app: express.Application = express();
+
+app.use(bodyParser.urlencoded({extended: false}))
+
+app.use(bodyParser.json());
 
 routes.map((route: Route) => app[route.method](route.path, (req, res) => {
     if (isJsonResponse(route.response)) {
